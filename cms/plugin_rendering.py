@@ -270,7 +270,7 @@ class ContentRenderer(BaseRenderer):
             set_placeholder_cache(
                 placeholder,
                 lang=language,
-                site_id=self.current_site.pk,
+                site_id=self.current_site,
                 content=content,
                 request=self.request,
             )
@@ -278,7 +278,7 @@ class ContentRenderer(BaseRenderer):
         rendered_placeholder = RenderedPlaceholder(
             placeholder=placeholder,
             language=language,
-            site_id=self.current_site.pk,
+            site_id=self.current_site,
             cached=use_cache,
             editable=editable,
             has_content=bool(placeholder_content),
@@ -462,7 +462,7 @@ class ContentRenderer(BaseRenderer):
         """
         # Placeholders can be rendered multiple times under different sites
         # it's important to have a per-site "cache".
-        site_id = self.current_site.pk
+        site_id = self.current_site
         site_cache = self._placeholders_content_cache.setdefault(site_id, {})
         # Placeholders can be rendered multiple times under different languages
         # it's important to have a per-language "cache".
@@ -588,7 +588,7 @@ class StructureRenderer(BaseRenderer):
         rendered_placeholder = RenderedPlaceholder(
             placeholder=placeholder,
             language=language,
-            site_id=self.current_site.pk,
+            site_id=self.current_site,
             cached=False,
             editable=True,
         )
