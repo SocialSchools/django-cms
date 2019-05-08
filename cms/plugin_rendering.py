@@ -588,7 +588,7 @@ class StructureRenderer(BaseRenderer):
         rendered_placeholder = RenderedPlaceholder(
             placeholder=placeholder,
             language=language,
-            site_id=self.current_site.pk,
+            site_id=self.current_site,
             cached=False,
             editable=True,
         )
