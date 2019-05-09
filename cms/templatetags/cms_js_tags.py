@@ -6,6 +6,7 @@ import json
 from classytags.core import Tag, Options
 from cms.utils.encoder import SafeJSONEncoder
 from django import template
+from django import settings
 from django.utils.safestring import mark_safe
 
 from sekizai.helpers import get_varname
@@ -38,6 +39,7 @@ def render_cms_structure_js(context, renderer, obj):
     static_placeholders = []
     page_placeholders_by_slot = obj.rescan_placeholders()
     declared_static_placeholders = obj.get_declared_static_placeholders(context)
+    multi_enabled = settings.ENABLE_MULTISITE
 
     for static_placeholder in declared_static_placeholders:
         kwargs = {
@@ -45,7 +47,7 @@ def render_cms_structure_js(context, renderer, obj):
             'defaults': {'creation_method': StaticPlaceholder.CREATION_BY_TEMPLATE}
         }
 
-        if static_placeholder.site_bound:
+        if static_placeholder.site_bound and multi_enabled is True:
             kwargs['site'] = renderer.current_site
         else:
             kwargs['site_id__isnull'] = True
