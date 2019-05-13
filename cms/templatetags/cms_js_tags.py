@@ -6,7 +6,7 @@ import json
 from classytags.core import Tag, Options
 from cms.utils.encoder import SafeJSONEncoder
 from django import template
-from django import settings
+from django.conf import settings
 from django.utils.safestring import mark_safe
 
 from sekizai.helpers import get_varname
