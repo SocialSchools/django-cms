@@ -876,8 +876,8 @@ class StaticPlaceholderNode(Tag):
                 'code': code,
                 'defaults': {'creation_method': StaticPlaceholder.CREATION_BY_TEMPLATE}
             }
-            multisite_enabled = settings.ENABLE_MULTISITE
-            if 'site' in extra_bits and multisite_enabled:
+            multi_enabled = settings.ENABLE_MULTISITE
+            if 'site' in extra_bits and multi_enabled is True:
                 kwargs['site'] = get_current_site()
             else:
                 kwargs['site_id__isnull'] = True
