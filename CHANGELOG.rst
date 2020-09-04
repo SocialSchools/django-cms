@@ -3,6 +3,35 @@ Changelog
 =========
 
 
+3.7.4 (2020-07-21)
+==================
+
+* Fixed a security vulnerability in the plugin_type url parameter to insert JavaScript code.
+
+
+3.7.3 (2020-05-27)
+==================
+
+* Fixed apphooks config select in Firefox
+* Fixed compatibility errors on python 2
+* Fixed long page titles in Page tree/list view to prevent horizontal scrolling
+* Adapted plugin documentations
+
+
+3.7.2 (2020-04-22)
+==================
+
+* Added support for Django 3.0
+* Added support for Python 3.8
+* migrated from ``django.utils.six`` to the six package
+* migrated from ``django.utils.lru_cache`` to ``functools.lru_cache``
+* migrated from ``render_to_response`` to ``render`` in ``cms.views``
+* added ``cms.utils.compat.dj.available_attrs``
+* added ``--force-color`` and ``--skip-checks`` in base commands when using Django 3
+* replaced ``staticfiles`` and ``admin_static`` with ``static``
+* replaced djangocms-helper with django-app-helper
+
+
 3.7.1 (2019-11-26)
 ==================
 
@@ -29,6 +58,7 @@ Changelog
 * Improved documentation related to nested plugins.
 * Updated installation tutorial.
 * Fixed a simple typo in the docstring for ``cms.utils.helpers.normalize_name``.
+* Updated 'How to create Plugins' Tutorial.
 
 
 3.7.0 (2019-09-25)
