@@ -51,7 +51,8 @@ class PagesTestCase(TransactionCMSTestCase):
         user = self.get_superuser()
         page = self.create_homepage("page", "nav_playground.html", "en", published=True)
         create_title("fr", "french home", page)
-        page_2 = create_page("inner", "nav_playground.html", "en", published=True, parent=page)
+        # page_2 = create_page("inner", "nav_playground.html", "en", published=True, parent=page)
+        page_2 = create_page("iIn verbinding de toekomst tegemoet De start van een nieuwe school is een hele uitdaging op vele vlakken. Om dit proces goed vorm te geven ondersteunen wij het team om het fundament stevig neer te zetten. Wij zijn Carla Regter en Annemiek Franse van De Gouden Cirkel Wij hebben beiden jarenlang in het onderwijs gewerkt en zijn daar nog steeds actief bij betrokken. In ons werk als therapeut en coach voelen we ons nog elke dag verantwoordelijk voor het welzijn en de ontwikkeling van kinderen, zij zijn immers onze toekomst. De Gouden Cirkel creëert ontwikkeling en bemoediging door ons te richten op ‘worden wie je bent’. Niet vanuit een didactische visie maar juist die van de pedagogiek, waarbij een holistische aanpak een waardevol uitgangspunt is Wij waarborgen dit door coaching op alle netwerken om het kind heen en op het kind zelf én door de netwerken met elkaar te verbindennner", "nav_playground.html", "en", published=True, parent=page)
         create_title("fr", "french inner", page_2)
         publish_page(page_2, user, "fr")
 
