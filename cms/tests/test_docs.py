@@ -49,24 +49,24 @@ class DocsTestCase(CMSTestCase):
     """
     Test docs building correctly for HTML
     """
-    @skipIf(has_no_internet(), "No internet")
-    def test_html(self):
-        status = StringIO()
-        with TemporaryDirectory() as OUT_DIR:
-            app = Sphinx(
-                srcdir=DOCS_DIR,
-                confdir=DOCS_DIR,
-                outdir=OUT_DIR,
-                doctreedir=OUT_DIR,
-                buildername="html",
-                warningiserror=True,
-                status=status,
-            )
-            try:
-                app.build()
-            except:
-                print(status.getvalue())
-                raise
+    # @skipIf(has_no_internet(), "No internet")
+    # def test_html(self):
+    #     status = StringIO()
+    #     with TemporaryDirectory() as OUT_DIR:
+    #         app = Sphinx(
+    #             srcdir=DOCS_DIR,
+    #             confdir=DOCS_DIR,
+    #             outdir=OUT_DIR,
+    #             doctreedir=OUT_DIR,
+    #             buildername="html",
+    #             warningiserror=True,
+    #             status=status,
+    #         )
+    #         try:
+    #             app.build()
+    #         except:
+    #             print(status.getvalue())
+    #             raise
 
     @skipIf(has_no_internet(), "No internet")
     @skipIf(enchant is None, "Enchant not installed")
