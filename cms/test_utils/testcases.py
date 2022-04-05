@@ -466,6 +466,7 @@ class BaseCMSTestCase():
         for other in warningsShown[1:]:
             if ((other.message, other.category)
                 != (first.message, first.category)):
+                print(other.message, first.message, other.category, first.category)
                 self.fail("Can't handle different warnings")
         self.assertEqual(first.message, message)
         self.assertTrue(first.category is category)
