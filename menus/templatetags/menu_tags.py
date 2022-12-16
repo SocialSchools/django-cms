@@ -291,7 +291,7 @@ class ShowBreadcrumb(InclusionTag):
             start_level = 0
         try:
             only_visible = bool(int(only_visible))
-        except TypeError:
+        except ValueError:
             only_visible = bool(only_visible)
 
         ancestors = []
