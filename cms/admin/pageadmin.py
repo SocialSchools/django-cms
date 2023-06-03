@@ -39,6 +39,7 @@ from django.views.decorators.http import require_POST
 from cms import operations
 from cms.admin.forms import (
     AddPageForm,
+    AddPageTypeForm,
     AdvancedSettingsForm,
     ChangeListForm,
     ChangePageForm,
@@ -55,6 +56,7 @@ from cms.models import (
     GlobalPagePermission,
     Page,
     PageContent,
+    PageType,
     PagePermission,
     Placeholder,
 )
@@ -1483,5 +1485,15 @@ class PageContentAdmin(admin.ModelAdmin):
         return "", []
 
 
+class PageTypeAdmin(PageAdmin):
+    add_form = AddPageTypeForm
+    change_form_template = 'admin/cms/page/change_form.html'
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        return queryset.exclude(is_page_type=False)
+
+
 admin.site.register(Page, PageAdmin)
 admin.site.register(PageContent, PageContentAdmin)
+admin.site.register(PageType, PageTypeAdmin)
