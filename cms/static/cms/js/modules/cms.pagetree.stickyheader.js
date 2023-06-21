@@ -72,7 +72,7 @@ var PageTreeStickyHeader = new Class({
         var win = Helpers._getWindow();
 
         if (win && win.parent && win.parent !== win) {
-            return true;
+            return win.parent.CMS !== undefined && win.parent.CMS.$ !== undefined;
         }
 
         return false;
