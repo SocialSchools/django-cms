@@ -8,7 +8,7 @@ import { once, debounce, throttle } from 'lodash';
 import { showLoader, hideLoader } from './loader';
 
 var _CMS = {
-    API: {}
+    API: {},
 };
 
 /**
@@ -20,7 +20,7 @@ var _CMS = {
 var _ns = function nameSpaceEvent(events) {
     return events
         .split(/\s+/g)
-        .map(function(eventName) {
+        .map(function (eventName) {
             return 'cms-' + eventName;
         })
         .join(' ');
@@ -35,7 +35,7 @@ export const $document = $(document);
  * Creates always an unique identifier if called
  * @returns {Number} incremental numbers starting from 0
  */
-export const uid = (function() {
+export const uid = (function () {
     let i = 0;
 
     return () => ++i;
@@ -95,7 +95,7 @@ export const Helpers = {
      * @returns {Boolean|void}
      */
     // eslint-disable-next-line max-params
-    reloadBrowser: function(url, timeout, ajax, data) {
+    reloadBrowser: function (url, timeout, ajax, data) {
         var that = this;
         // is there a parent window?
         var win = this._getWindow();
@@ -107,7 +107,7 @@ export const Helpers = {
         if (ajax) {
             // Check if this is running inside a sideframe and then access
             // the CMS APIs from the parent window
-            if (parent.CMS && parent.CMS.API && parent.CMS.API.locked) {
+            if (parent.CMS && parent.CMS.API) {
                 parent.CMS.API.locked = true;
                 // check if the url has changed, if true redirect to the new path
                 // this requires an ajax request
@@ -117,9 +117,9 @@ export const Helpers = {
                     url: parent.CMS.config.request.url,
                     data: data || {
                         model: parent.CMS.config.request.model,
-                        pk: parent.CMS.config.request.pk
+                        pk: parent.CMS.config.request.pk,
                     },
-                    success: function(response) {
+                    success: function (response) {
                         parent.CMS.API.locked = false;
 
                         if (response === '' && !url) {
@@ -135,7 +135,7 @@ export const Helpers = {
                             // on_close can also provide a url, reload to the new destination
                             that.reloadBrowser(url);
                         }
-                    }
+                    },
                 });
             }
 
@@ -144,7 +144,7 @@ export const Helpers = {
         }
 
         // add timeout if provided
-        parent.setTimeout(function() {
+        parent.setTimeout(function () {
             if (url && url !== parent.location.href) {
                 // location.reload() takes precedence over this, so we
                 // don't want to reload the page if we need a redirect
@@ -162,12 +162,12 @@ export const Helpers = {
      * @function onPluginSave
      * @public
      */
-    onPluginSave: function() {
+    onPluginSave: function () {
         var data = this.dataBridge;
         var editedPlugin =
             data &&
             data.plugin_id &&
-            window.CMS._instances.some(function(plugin) {
+            window.CMS._instances.some(function (plugin) {
                 return Number(plugin.options.plugin_id) === Number(data.plugin_id) && plugin.options.type === 'plugin';
             });
         var addedPlugin = !editedPlugin && data && data.plugin_id;
@@ -189,16 +189,16 @@ export const Helpers = {
      *
      * @method preventSubmit
      */
-    preventSubmit: function() {
+    preventSubmit: function () {
         var forms = $('.cms-toolbar').find('form');
         var SUBMITTED_OPACITY = 0.5;
 
-        forms.submit(function() {
+        forms.submit(function () {
             // show loader
             showLoader();
             // we cannot use disabled as the name action will be ignored
             $('input[type="submit"]')
-                .on('click', function(e) {
+                .on('click', function (e) {
                     e.preventDefault();
                 })
                 .css('opacity', SUBMITTED_OPACITY);
@@ -211,11 +211,11 @@ export const Helpers = {
      * @method csrf
      * @param {String} csrf_token
      */
-    csrf: function(csrf_token) {
+    csrf: function (csrf_token) {
         $.ajaxSetup({
-            beforeSend: function(xhr) {
+            beforeSend: function (xhr) {
                 xhr.setRequestHeader('X-CSRFToken', csrf_token);
-            }
+            },
         });
     },
 
@@ -229,7 +229,7 @@ export const Helpers = {
      * @param {Object} newSettings
      * @returns {Object}
      */
-    setSettings: function(newSettings) {
+    setSettings: function (newSettings) {
         // merge settings
         var settings = JSON.stringify($.extend({}, window.CMS.config.settings, newSettings));
 
@@ -248,20 +248,20 @@ export const Helpers = {
                 url: window.CMS.config.urls.settings,
                 data: {
                     csrfmiddlewaretoken: window.CMS.config.csrf,
-                    settings: settings
+                    settings: settings,
                 },
-                success: function(data) {
+                success: function (data) {
                     CMS.API.locked = false;
                     // determine if logged in or not
                     settings = data ? JSON.parse(data) : window.CMS.config.settings;
                     hideLoader();
                 },
-                error: function(jqXHR) {
+                error: function (jqXHR) {
                     CMS.API.Messages.open({
                         message: jqXHR.responseText + ' | ' + jqXHR.status + ' ' + jqXHR.statusText,
-                        error: true
+                        error: true,
                     });
-                }
+                },
             });
         }
 
@@ -279,9 +279,8 @@ export const Helpers = {
      * @method getSettings
      * @returns {Object}
      */
-    getSettings: function() {
+    getSettings: function () {
         var settings;
-
 
         // use local storage or session
         if (this._isStorageSupported) {
@@ -295,26 +294,24 @@ export const Helpers = {
                 async: false,
                 type: 'GET',
                 url: window.CMS.config.urls.settings,
-                success: function(data) {
+                success: function (data) {
                     CMS.API.locked = false;
                     // determine if logged in or not
                     settings = data ? JSON.parse(data) : window.CMS.config.settings;
                     hideLoader();
                 },
-                error: function(jqXHR) {
+                error: function (jqXHR) {
                     CMS.API.Messages.open({
                         message: jqXHR.responseText + ' | ' + jqXHR.status + ' ' + jqXHR.statusText,
-                        error: true
+                        error: true,
                     });
-                }
+                },
             });
         }
 
         // edit_off is a random flag that should be available on the page, but sometimes can
         // be not set when settings are carried over from pagetree
-        if (
-            (!settings || !currentVersionMatches(settings))
-        ) {
+        if (!settings || !currentVersionMatches(settings)) {
             settings = this.setSettings(window.CMS.config.settings);
         }
 
@@ -337,7 +334,7 @@ export const Helpers = {
     makeURL: function makeURL(url, params = []) {
         let newUrl = new URL(URL.decode(url.replace(/&amp;/g, '&')));
 
-        params.forEach(pair => {
+        params.forEach((pair) => {
             const [key, value] = pair;
 
             newUrl.removeSearch(key);
@@ -432,7 +429,7 @@ export const Helpers = {
      * @param {String} namespace so we don't mix events from two different places on the same element
      */
     preventTouchScrolling: function preventTouchScrolling(element, namespace) {
-        element.on('touchmove.cms.preventscroll.' + namespace, function(e) {
+        element.on('touchmove.cms.preventscroll.' + namespace, function (e) {
             e.preventDefault();
         });
     },
@@ -455,7 +452,7 @@ export const Helpers = {
      * @private
      * @returns {Window}
      */
-    _getWindow: function() {
+    _getWindow: function () {
         return window;
     },
 
@@ -467,7 +464,7 @@ export const Helpers = {
      * @param {String} url url
      * @returns {String} modified url
      */
-    updateUrlWithPath: function(url) {
+    updateUrlWithPath: function (url) {
         var win = this._getWindow();
         var path = win.location.pathname + win.location.search;
 
@@ -475,30 +472,18 @@ export const Helpers = {
     },
 
     /**
-     * Get color scheme either from :root[data-color-scheme] or user system setting
+     * Get color scheme either from :root[data-theme] or user system setting
      *
      * @method get_color_scheme
      * @public
      * @returns {String}
      */
     getColorScheme: function () {
-        let state = $('html').attr('data-color-scheme');
+        let state = $('html').attr('data-theme');
 
         if (!state) {
-            if (!CMS.settings) {
-                // Settings loaded? If not, pls. load.
-                this.getSettings();
-            }
-            state = CMS.settings.color_scheme;
-            if (!state && window.matchMedia) {
-                if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                    state = 'dark'; // dark mode
-                } else {
-                    state = 'light';
-                }
-            }
+            state = localStorage.getItem('theme') || CMS.config.color_scheme || 'auto';
         }
-
         return state;
     },
 
@@ -508,35 +493,63 @@ export const Helpers = {
      * @method setColorScheme
      * @public
      * @param scheme {String}
-     * @retiurns {void}
+     * @returns {void}
      */
 
-    setColorScheme: function (scheme) {
+    setColorScheme: function (mode) {
         let body = $('html');
+        let scheme = mode !== 'light' && mode !== 'dark' ? 'auto' : mode;
 
-        if (!CMS.settings) {
-            // Settings loaded? If not, pls. load.
-            this.getSettings();
+        if (localStorage.getItem('theme') || CMS.config.color_scheme !== scheme) {
+            // Only set local storage if it is either already set or if scheme differs from preset
+            // to avoid fixing the user setting to the preset (which would ignore a change in presets)
+            localStorage.setItem('theme', scheme);
         }
-        CMS.settings.color_scheme = scheme;
-        this.setSettings(CMS.settings);
-        if (scheme === 'auto') {
-            body.removeAttr('data-color-scheme');
-            body.find('div.cms iframe').each(function(i, e) {
-                delete e.contentDocument.documentElement.dataset.colorScheme;
-            });
+
+        body.attr('data-theme', scheme);
+        body.find('div.cms iframe').each(function setFrameColorScheme(i, e) {
+            if (e.contentDocument) {
+                e.contentDocument.documentElement.dataset.theme = scheme;
+                // ckeditor (and potentially other apps) have iframes inside their admin forms
+                // also set color scheme there
+                $(e.contentDocument).find('iframe').each(setFrameColorScheme);
+            }
+        });
+    },
+
+    /**
+     * Cycles the color scheme for the current document and all iframes contained.
+     * Follows the logic introduced in Django's 4.2 admin
+     *
+     * @method setColorScheme
+     * @public}
+     * @returns {void}
+     */
+    toggleColorScheme: function () {
+        const currentTheme = this.getColorScheme();
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        if (prefersDark) {
+            // Auto (dark) -> Light -> Dark
+            if (currentTheme === 'auto') {
+                this.setColorScheme('light');
+            } else if (currentTheme === 'light') {
+                this.setColorScheme('dark');
+            } else {
+                this.setColorScheme('auto');
+            }
         } else {
-            body.attr('data-color-scheme', scheme);
-            body.find('div.cms iframe').each(function setFrameColorScheme(i, e) {
-                if (e.contentDocument) {
-                    e.contentDocument.documentElement.dataset.colorScheme = scheme;
-                    // ckeditor (and potentially other apps) have iframes inside their admin forms
-                    // also set color scheme there
-                    $(e.contentDocument).find('iframe').each(setFrameColorScheme);
-                }
-            });
+            // Auto (light) -> Dark -> Light
+            // eslint-disable-next-line no-lonely-if
+            if (currentTheme === 'auto') {
+                this.setColorScheme('dark');
+            } else if (currentTheme === 'dark') {
+                this.setColorScheme('light');
+            } else {
+                this.setColorScheme('auto');
+            }
         }
-    }
+    },
 };
 
 /**
@@ -558,11 +571,11 @@ export const KEYS = {
     CMD_LEFT: 91,
     CMD_RIGHT: 93,
     CMD_FIREFOX: 224,
-    CTRL: 17
+    CTRL: 17,
 };
 
 // shorthand for jQuery(document).ready();
-$(function() {
+$(function () {
     CMS._eventRoot = $('#cms-top');
     // autoinits
     Helpers.preventSubmit();
